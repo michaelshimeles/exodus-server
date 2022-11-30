@@ -7,7 +7,6 @@ const PORT = process.env.PORT || 8080;
 const RESEVOIR_API_KEY = process.env.RESEVOIR_API_KEY;
 const MODULE_API_KEY = process.env.MODULE_API_KEY;
 
-
 app.use(cors());
 app.use(express.json());
 
@@ -71,6 +70,28 @@ app.get("/listings/:id", (req, res) => {
         res.status(404).json(error);
       });
   });
+
+app.get("/info/resevoir/:id", (req, res) => {
+    let config = {
+        headers: {
+          "accept-encoding": "*",
+        },
+      };
+      axios
+      .get(
+        `https://api.reservoir.tools/collections/v5?contract=${req.params.id}&includeTopBid=false&normalizeRoyalties=false&sortBy=allTimeVolume&limit=20&x-api-key=${RESEVOIR_API_KEY}`,
+        config
+      )
+      .then((response) => {
+        console.log(response.data);
+        res.status(200).json({ data: response.data });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(404).json(error);
+      });
+    // 
+})
 
 // Collection Stats
 // tokenListedCount, holders, totalSupply, floorPrice
