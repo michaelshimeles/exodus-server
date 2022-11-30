@@ -119,6 +119,31 @@ app.get("/info/:id", (req, res) => {
         res.status(404).json(error);
       });
   });
+
+// Sales Chart + Sales Card With Images
+app.get("/sales/module/:id", (req, res) => {
+    let config = {
+      headers: {
+        Accept: "application/json",
+        "accept-encoding": "*",
+        "X-API-KEY": MODULE_API_KEY,
+      },
+    };
+    axios
+      .get(
+        `https://api.modulenft.xyz/api/v2/eth/nft/sales?count=100&offset=0&sortDirection=timeDesc&contractAddress=${req.params.id}&withMetadata=true"`,
+        config
+      )
+      .then((response) => {
+        console.log(response.data);
+        res.status(200).json(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(404).json(error);
+      });
+  });
+  
   
 
 app.listen(PORT, (_req, _res) => {
