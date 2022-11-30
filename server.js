@@ -95,6 +95,30 @@ app.get("/stats/:id", (req, res) => {
         res.status(404).json(error);
       });
   });
+
+
+// Collection Info
+app.get("/info/:id", (req, res) => {
+    let config = {
+      headers: {
+        "accept-encoding": "*",
+        "X-API-KEY": MODULE_API_KEY,
+      },
+    };
+    axios
+      .get(
+        `https://api.modulenft.xyz/api/v2/eth/nft/collection?contractAddress=${req.params.id}`,
+        config
+      )
+      .then((response) => {
+        console.log(response.data.dat);
+        res.status(200).json(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(404).json(error);
+      });
+  });
   
 
 app.listen(PORT, (_req, _res) => {
