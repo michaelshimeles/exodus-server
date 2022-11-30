@@ -50,6 +50,28 @@ app.get("/sales/:id", (req, res) => {
       });
   });
   
+// Listing Distribution Chart & Listings Card With Images
+app.get("/listings/:id", (req, res) => {
+    let config = {
+      headers: {
+        "accept-encoding": "*",
+      },
+    };
+    axios
+      .get(
+        `https://api.reservoir.tools/orders/asks/v3?contracts=${req.params.id}&status=active&includePrivate=false&includeMetadata=true&x-api-key=${RESEVOIR_API_KEY}&sortBy=createdAt&limit=100`,
+        config
+      )
+      .then((response) => {
+        console.log(response.data);
+        res.status(200).json({ data: response.data });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(404).json(error);
+      });
+  });
+  
 
 app.listen(PORT, (_req, _res) => {
     console.log("Server is live");
