@@ -93,7 +93,6 @@ app.get("/info/resevoir/:id", (req, res) => {
 });
 
 app.get("/topcollections", (req, res) => {
-  // https://api.reservoir.tools/collections/v5
   let config = {
     headers: {
       "accept-encoding": "*",
@@ -102,7 +101,10 @@ app.get("/topcollections", (req, res) => {
   };
 
   axios
-    .get(`https://api.reservoir.tools/collections/v5`, config)
+    .get(
+      `https://api.reservoir.tools/collections/v5?includeTopBid=false&normalizeRoyalties=false&sortBy=7DayVolume&limit=10`,
+      config
+    )
     .then((response) => {
       console.log(response.data);
       res.status(200).json(response.data);
@@ -199,7 +201,27 @@ app.get("/owner/:id", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(404).json(error);
+    });
+});
+
+// Trader & Wallet Stats
+app.get("/wallet/:id", (req, res) => {
+  let config = {
+    headers: {
+      Accept: "application/json",
+      "accept-encoding": "*",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImFkZHJlc3MiOiIweDY0Y2MxMTg5M2FmMzE1ODUwZjg4MmY2NzkwYzAzYzVhN2RhZDAxMTMifSwiaWF0IjoxNjYzODU5NjgzLCJleHAiOjE2OTUzOTU2ODN9.C2rVpPAm0sg7JIKj3tu8d-GH6AP0AaLqYNuBkpFIHYA",
+    },
+  };
+  axios
+    .get(`https://rutherford.5.dev/api/scores/${req.params.id}`, config)
+    .then((response) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
