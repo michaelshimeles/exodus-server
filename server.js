@@ -6,7 +6,6 @@ const axios = require("axios");
 const PORT = process.env.PORT || 8080;
 const RESEVOIR_API_KEY = process.env.RESEVOIR_API_KEY;
 const MODULE_API_KEY = process.env.MODULE_API_KEY;
-const INTELLIGENCE_API_KEY = process.env.INTELLIGENCE_API_KEY;
 
 app.use(cors());
 app.use(express.json());
@@ -284,8 +283,7 @@ app.get("/collections/:id", (req, res) => {
       Authorization: "8ebf2802-1b59-422d-bc73-bbb96d90e177",
     },
     params: {
-      continuation:
-        req.params.next
+      continuation: req.params.next,
     },
   };
 
@@ -311,6 +309,65 @@ app.post("/floorprice", (req, res) => {
     .get(
       `https://api.modulenft.xyz/api/v2/eth/nft/floor?contractAddress=${req.body.address}`,
       config
+    )
+    .then((response) => {
+      console.log(response.data);
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(404).json(error);
+    });
+});
+
+app.get("/topprofits", (req, res) => {
+  axios
+    .post(
+      "https://api.transpose.io/sql",
+      {
+        sql: `SELECT collection_address AS "Collection Address",
+        old_floor AS "Yesterday's Floor (ETH)",
+        new_floor AS "Current Floor (ETH)",
+        round(((new_floor - old_floor) / old_floor) * 100, 2) AS "Percent Change (%)"
+FROM (
+SELECT
+
+(SELECT contract_address 
+FROM ethereum.collections
+WHERE contract_address = c.address) AS collection_address,
+
+(SELECT percentile_disc(0.05)
+WITHIN GROUP (ORDER BY eth_price) 
+FROM ethereum.nft_sales 
+WHERE contract_address = c.address 
+AND timestamp >= NOW() - INTERVAL '2 DAY'
+AND timestamp <= NOW() - INTERVAL '1 DAY') AS old_floor,
+
+(SELECT percentile_disc(0.05)
+WITHIN GROUP (ORDER BY eth_price) 
+FROM ethereum.nft_sales 
+WHERE contract_address = c.address 
+AND timestamp >= NOW() - INTERVAL '1 DAY') AS new_floor
+
+FROM 
+
+(SELECT DISTINCT contract_address AS address
+FROM ethereum.nft_sales
+WHERE timestamp >= NOW() - INTERVAL '1 DAY') AS c
+) as floors
+
+WHERE new_floor IS NOT NULL
+AND old_floor IS NOT NULL
+AND old_floor >= 0.1 /* only floor prices >= 0.1 ETH, helps cut through the noise. */
+ORDER BY "Percent Change (%)" DESC
+LIMIT 100;`,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "7Fo04pRfiOW3JuaOitAEHq2EqwNsbVft",
+        },
+      }
     )
     .then((response) => {
       console.log(response.data);
