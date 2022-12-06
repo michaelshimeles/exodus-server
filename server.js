@@ -6,6 +6,7 @@ const axios = require("axios");
 const PORT = process.env.PORT || 8080;
 const RESEVOIR_API_KEY = process.env.RESEVOIR_API_KEY;
 const MODULE_API_KEY = process.env.MODULE_API_KEY;
+const INTELLIGENCE_API_KEY = process.env.INTELLIGENCE_API_KEY;
 
 app.use(cors());
 app.use(express.json());
@@ -41,7 +42,7 @@ app.get("/sales/:id", (req, res) => {
       });
 
       console.log(salesData);
-      res.status(200).send({ data: salesData, original: response.data });
+      res.status(200).send(salesData);
     })
     .catch((error) => {
       console.log(error);
@@ -116,7 +117,6 @@ app.get("/topcollections", (req, res) => {
 });
 
 // Collection Stats
-// tokenListedCount, holders, totalSupply, floorPrice
 app.get("/stats/:id", (req, res) => {
   let config = {
     headers: {
@@ -222,6 +222,98 @@ app.get("/wallet/:id", (req, res) => {
   axios
     .get(`https://rutherford.5.dev/api/scores/${req.params.id}`, config)
     .then((response) => {
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(404).json(error);
+    });
+});
+
+app.get("/portfolio/:id", (req, res) => {
+  let config = {
+    headers: {
+      Accept: "application/json",
+      "accept-encoding": "*",
+      "X-API-KEY": MODULE_API_KEY,
+    },
+  };
+  axios
+    .get(
+      `https://api.modulenft.xyz/api/v2/eth/nft/collectionsOwned?address=${req.params.id}&count=100&offset=0&type=all&withMetadata=true`,
+      config
+    )
+    .then((response) => {
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(404).json(error);
+    });
+});
+
+// Hot mints
+app.post("/hotmints", (req, res) => {
+  headers = {
+    accept: "application/json",
+    "X-API-KEY": "c8203386-2d6d-48ab-97b9-597df64c7756",
+  };
+
+  axios
+    .get(
+      `https://data-api.nftgo.io/eth/v1/market/rank/top-mints/${req.body.time}?sort_by=mint_num&is_listed=false&asc=false&offset=0&limit=10`,
+      {
+        headers,
+      }
+    )
+    .then((response) => {
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(404).json(error);
+    });
+});
+
+// Specific NFT collections owned by wallet
+app.get("/collections/:id", (req, res) => {
+  let config = {
+    headers: {
+      accept: "application/json",
+      "accept-encoding": "*",
+      Authorization: "8ebf2802-1b59-422d-bc73-bbb96d90e177",
+    },
+    params: {
+      continuation:
+        req.params.next
+    },
+  };
+
+  axios
+    .get(`https://api.nftport.xyz/v0/accounts/${req.params.id}`, config)
+    .then((response) => {
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(404).json(error);
+    });
+});
+
+app.post("/floorprice", (req, res) => {
+  let config = {
+    headers: {
+      "accept-encoding": "*",
+      "X-API-KEY": MODULE_API_KEY,
+    },
+  };
+  axios
+    .get(
+      `https://api.modulenft.xyz/api/v2/eth/nft/floor?contractAddress=${req.body.address}`,
+      config
+    )
+    .then((response) => {
+      console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
