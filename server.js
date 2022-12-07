@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const axios = require("axios");
-const { response } = require("express");
 require("dotenv").config();
 
 const PORT = process.env.PORT;
@@ -13,6 +12,10 @@ const ETH_SALES_API_KEY = process.env.ETH_SALES_API_KEY;
 
 app.use(cors());
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.status(200).json("Welcome");
+})
 
 // Sales Chart + Sales Card With Images
 app.get("/sales/:id", (req, res) => {
@@ -28,8 +31,6 @@ app.get("/sales/:id", (req, res) => {
       config
     )
     .then((response) => {
-      // console.log(response.data);
-
       const salesData = response.data.sales.map((sale) => {
         return {
           name: sale.token.collection.name,
@@ -48,7 +49,6 @@ app.get("/sales/:id", (req, res) => {
       res.status(200).send(salesData);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -66,11 +66,9 @@ app.get("/listings/:id", (req, res) => {
       config
     )
     .then((response) => {
-      // console.log(response.data);
       res.status(200).json({ data: response.data });
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -87,11 +85,9 @@ app.get("/info/resevoir/:id", (req, res) => {
       config
     )
     .then((response) => {
-      // console.log(response.data);
       res.status(200).json({ data: response.data });
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -110,11 +106,9 @@ app.get("/topcollections", (req, res) => {
       config
     )
     .then((response) => {
-      // console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -133,11 +127,9 @@ app.get("/stats/:id", (req, res) => {
       config
     )
     .then((response) => {
-      // console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -160,7 +152,6 @@ app.get("/info/:id", (req, res) => {
       res.status(200).json(response.data.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -180,11 +171,9 @@ app.get("/sales/module/:id", (req, res) => {
       config
     )
     .then((response) => {
-      // console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -207,7 +196,6 @@ app.get("/owner/:id", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -227,7 +215,6 @@ app.get("/wallet/:id", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -249,7 +236,6 @@ app.get("/portfolio/:id", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -300,7 +286,6 @@ app.get("/collections/:id", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -321,7 +306,6 @@ app.post("/floorprice", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -376,11 +360,9 @@ LIMIT 10;`,
       }
     )
     .then((response) => {
-      // console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -400,11 +382,9 @@ app.get("/whales/:id", (req, res) => {
       }
     )
     .then((response) => {
-      // console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      // console.log(error);
       res.status(404).json(error);
     });
 });
