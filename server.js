@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const axios = require("axios");
+const { response } = require("express");
 require("dotenv").config();
 
 const PORT = process.env.PORT;
@@ -15,7 +16,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.status(200).json("Welcome");
-})
+});
 
 // Sales Chart + Sales Card With Images
 app.get("/sales/:id", (req, res) => {
@@ -386,6 +387,95 @@ app.get("/whales/:id", (req, res) => {
     })
     .catch((error) => {
       res.status(404).json(error);
+    });
+});
+
+app.get("/gas", (req, res) => {
+  let config = {
+    headers: {
+      accept: "application/json",
+      "accept-encoding": "*",
+    }
+  }
+  axios
+    .get("https://etherchain.org/api/gasnow", config)
+    .then((response) => {
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json(error);
+    });
+});
+
+app.get("/collections", (req, res) => {
+  axios
+    .post(
+      "https://api-v2-6.gemlabs.xyz/collections",
+      {
+        sort: {
+          "stats.one_day_volume": -1,
+        },
+        limit: 100,
+        fields: {
+          name: 1,
+          symbol: 1,
+          standard: 1,
+          description: 1,
+          address: 1,
+          createdDate: 1,
+          externalUrl: 1,
+          imageUrl: 1,
+          totalSupply: 1,
+          sevenDayVolume: 1,
+          oneDayVolume: 1,
+          stats: 1,
+          indexingStatus: 1,
+          discordUrl: 1,
+          revealPercentage: 1,
+          instagramUsername: 1,
+          isVerified: 1,
+          lastNumberOfUpdates: 1,
+          lastOpenSeaCancelledId: 1,
+          lastOpenSeaSaleCreatedId: 1,
+          slug: 1,
+          lastOpenSeaTransferId: 1,
+          lastRaribleAssetUpdateId: 1,
+          mediumUsername: 1,
+          telegramUrl: 1,
+          twitterUsername: 1,
+          updatedAt: 1,
+          wikiUrl: 1,
+        },
+      },
+      {
+        headers: {
+          authority: "api-v2-6.gemlabs.xyz",
+          accept: "*/*",
+          "accept-encoding": "*",
+          "accept-language": "en-US,en;q=0.9",
+          "content-type": "application/json",
+          origin: "https://www.gem.xyz",
+          referer: "https://www.gem.xyz/",
+          "sec-ch-ua":
+            '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+          "sec-ch-ua-mobile": "?1",
+          "sec-ch-ua-platform": '"Android"',
+          "sec-fetch-dest": "empty",
+          "sec-fetch-mode": "cors",
+          "sec-fetch-site": "cross-site",
+          "user-agent":
+            "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36",
+          "x-api-key": "rLnNH1tdrT09EQjGsjrSS7V3uGonfZLW",
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+      res.status(200).json(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(404).json(response.data)
     });
 });
 
