@@ -2,10 +2,14 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const axios = require("axios");
+const { response } = require("express");
+require("dotenv").config();
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 const RESEVOIR_API_KEY = process.env.RESEVOIR_API_KEY;
 const MODULE_API_KEY = process.env.MODULE_API_KEY;
+const FIVE_API_KEY = process.env.FIVE_API_KEY;
+const ETH_SALES_API_KEY = process.env.ETH_SALES_API_KEY;
 
 app.use(cors());
 app.use(express.json());
@@ -24,7 +28,7 @@ app.get("/sales/:id", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
 
       const salesData = response.data.sales.map((sale) => {
         return {
@@ -40,11 +44,11 @@ app.get("/sales/:id", (req, res) => {
         };
       });
 
-      console.log(salesData);
+      // console.log(salesData);
       res.status(200).send(salesData);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -62,11 +66,11 @@ app.get("/listings/:id", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       res.status(200).json({ data: response.data });
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -83,11 +87,11 @@ app.get("/info/resevoir/:id", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       res.status(200).json({ data: response.data });
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -106,11 +110,11 @@ app.get("/topcollections", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -129,11 +133,11 @@ app.get("/stats/:id", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -152,11 +156,11 @@ app.get("/info/:id", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data.dat);
+      // console.log(response.data.dat);
       res.status(200).json(response.data.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -176,11 +180,11 @@ app.get("/sales/module/:id", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -203,7 +207,7 @@ app.get("/owner/:id", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -214,8 +218,7 @@ app.get("/wallet/:id", (req, res) => {
     headers: {
       Accept: "application/json",
       "accept-encoding": "*",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImFkZHJlc3MiOiIweDY0Y2MxMTg5M2FmMzE1ODUwZjg4MmY2NzkwYzAzYzVhN2RhZDAxMTMifSwiaWF0IjoxNjYzODU5NjgzLCJleHAiOjE2OTUzOTU2ODN9.C2rVpPAm0sg7JIKj3tu8d-GH6AP0AaLqYNuBkpFIHYA",
+      Authorization: `Bearer ${FIVE_API_KEY}`,
     },
   };
   axios
@@ -224,7 +227,7 @@ app.get("/wallet/:id", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -246,7 +249,7 @@ app.get("/portfolio/:id", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -269,7 +272,6 @@ app.post("/hotmints", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
       res.status(404).json(error);
     });
 });
@@ -282,18 +284,23 @@ app.get("/collections/:id", (req, res) => {
       "accept-encoding": "*",
       Authorization: "8ebf2802-1b59-422d-bc73-bbb96d90e177",
     },
-    params: {
-      continuation: req.params.next,
-    },
   };
 
   axios
-    .get(`https://api.nftport.xyz/v0/accounts/${req.params.id}`, config)
+    .get(
+      `https://api.nftport.xyz/v0/accounts/${
+        req.params.id
+      }?chain=ethereum&continuation=${
+        Object.keys(req.body).length === 0 ? "" : req.body.continuation
+      }`,
+      config
+    )
     .then((response) => {
+      // console.log(response.data)
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -311,11 +318,10 @@ app.post("/floorprice", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
       res.status(404).json(error);
     });
 });
@@ -360,7 +366,7 @@ WHERE new_floor IS NOT NULL
 AND old_floor IS NOT NULL
 AND old_floor >= 0.1 /* only floor prices >= 0.1 ETH, helps cut through the noise. */
 ORDER BY "Percent Change (%)" DESC
-LIMIT 100;`,
+LIMIT 10;`,
       },
       {
         headers: {
@@ -370,11 +376,35 @@ LIMIT 100;`,
       }
     )
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
+      res.status(404).json(error);
+    });
+});
+
+app.get("/whales/:id", (req, res) => {
+  const params = {
+    limit: 20,
+    sortDirection: "SORT_DIRECTION_DESC",
+  };
+  const headers = { "x-api-key": ETH_SALES_API_KEY };
+  axios
+    .get(
+      `https://ethereum.rest.mnemonichq.com/collections/v1beta1/current_owners/${req.params.id}`,
+      {
+        params,
+        headers,
+      }
+    )
+    .then((response) => {
+      // console.log(response.data);
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      // console.log(error);
       res.status(404).json(error);
     });
 });
