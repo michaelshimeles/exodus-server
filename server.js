@@ -395,8 +395,8 @@ app.get("/gas", (req, res) => {
     headers: {
       accept: "application/json",
       "accept-encoding": "*",
-    }
-  }
+    },
+  };
   axios
     .get("https://etherchain.org/api/gasnow", config)
     .then((response) => {
@@ -410,41 +410,27 @@ app.get("/gas", (req, res) => {
 app.get("/collections", (req, res) => {
   axios
     .post(
-      "https://api-v2-6.gemlabs.xyz/collections",
+      "https://api-v2-6.gemlabs.xyz/assets",
       {
+        'filters': {
+          'address': "0xc178994cb9b66307cd62db8b411759dd36d9c2ee",
+          'pendingTrxs': [{}]
+      },
         sort: {
           "stats.one_day_volume": -1,
         },
         limit: 100,
         fields: {
           name: 1,
-          symbol: 1,
-          standard: 1,
-          description: 1,
           address: 1,
           createdDate: 1,
-          externalUrl: 1,
           imageUrl: 1,
-          totalSupply: 1,
-          sevenDayVolume: 1,
-          oneDayVolume: 1,
           stats: 1,
           indexingStatus: 1,
-          discordUrl: 1,
-          revealPercentage: 1,
-          instagramUsername: 1,
           isVerified: 1,
-          lastNumberOfUpdates: 1,
-          lastOpenSeaCancelledId: 1,
-          lastOpenSeaSaleCreatedId: 1,
           slug: 1,
-          lastOpenSeaTransferId: 1,
-          lastRaribleAssetUpdateId: 1,
-          mediumUsername: 1,
-          telegramUrl: 1,
-          twitterUsername: 1,
-          updatedAt: 1,
-          wikiUrl: 1,
+  
+          pendingTrxs: 1
         },
       },
       {
@@ -471,11 +457,51 @@ app.get("/collections", (req, res) => {
     )
     .then((response) => {
       console.log(response.data);
-      res.status(200).json(response.data)
+      res.status(200).json(response.data);
     })
     .catch((error) => {
       console.log(error);
-      res.status(404).json(response.data)
+      res.status(404).json(response.data);
+    });
+});
+
+app.post("/sales/time/:id", (req, res) => {
+  let config = {
+    headers: {
+      "accept-encoding": "*",
+    },
+  };
+  axios
+    .get(
+      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=${req.body.metadata}&collection=${req.params.id}&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}&x-api-key=${RESEVOIR_API_KEY}`,
+      config
+    )
+    .then((response) => {
+      console.log(response.data);
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json(response.data);
+    });
+});
+
+app.post("/listings/time/:id", (req, res) => {
+  let config = {
+    headers: {
+      "accept-encoding": "*",
+    },
+  };
+  axios
+    .get(
+      `https://api.reservoir.tools/orders/asks/v4?contracts=${req.params.id}&status=active&includePrivate=false&includeCriteriaMetadata=${req.body.metadata}&includeRawData=false&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}&normalizeRoyalties=false&sortBy=createdAt`,
+      config
+    )
+    .then((response) => {
+      console.log(response.data);
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json(response.data);
     });
 });
 
