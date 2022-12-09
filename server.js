@@ -10,6 +10,9 @@ const RESEVOIR_API_KEY = process.env.RESEVOIR_API_KEY;
 const MODULE_API_KEY = process.env.MODULE_API_KEY;
 const FIVE_API_KEY = process.env.FIVE_API_KEY;
 const ETH_SALES_API_KEY = process.env.ETH_SALES_API_KEY;
+const TRANSPOSE_API = process.env.TRANSPOSE_API;
+const NFT_GO_API = process.env.NFT_GO_API;
+const NFT_PORT_API = process.env.NFT_PORT_API;
 
 app.use(cors());
 app.use(express.json());
@@ -23,12 +26,13 @@ app.get("/sales/:id", (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
+      "x-api-key": RESEVOIR_API_KEY,
     },
   };
 
   axios
     .get(
-      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=true&collection=${req.params.id}&x-api-key=${RESEVOIR_API_KEY}`,
+      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=true&collection=${req.params.id}`,
       config
     )
     .then((response) => {
@@ -59,11 +63,12 @@ app.get("/listings/:id", (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
+      "x-api-key": RESEVOIR_API_KEY,
     },
   };
   axios
     .get(
-      `https://api.reservoir.tools/orders/asks/v3?contracts=${req.params.id}&status=active&includePrivate=false&includeMetadata=true&x-api-key=${RESEVOIR_API_KEY}&sortBy=createdAt&limit=100`,
+      `https://api.reservoir.tools/orders/asks/v3?contracts=${req.params.id}&status=active&includePrivate=false&includeMetadata=true&sortBy=createdAt&limit=100`,
       config
     )
     .then((response) => {
@@ -78,6 +83,7 @@ app.get("/info/resevoir/:id", (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
+      "x-api-key": RESEVOIR_API_KEY,
     },
   };
   axios
@@ -97,7 +103,7 @@ app.get("/topcollections", (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
-      "x-api-key": "c068dde1-dc4a-57d1-9432-da9e4872db73",
+      "x-api-key": RESEVOIR_API_KEY,
     },
   };
 
@@ -245,7 +251,7 @@ app.get("/portfolio/:id", (req, res) => {
 app.post("/hotmints", (req, res) => {
   headers = {
     accept: "application/json",
-    "X-API-KEY": "c8203386-2d6d-48ab-97b9-597df64c7756",
+    "X-API-KEY": NFT_GO_API,
   };
 
   axios
@@ -269,7 +275,7 @@ app.get("/collections/:id", (req, res) => {
     headers: {
       accept: "application/json",
       "accept-encoding": "*",
-      Authorization: "8ebf2802-1b59-422d-bc73-bbb96d90e177",
+      Authorization: NFT_PORT_API,
     },
   };
 
@@ -356,7 +362,7 @@ LIMIT 10;`,
       {
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": "7Fo04pRfiOW3JuaOitAEHq2EqwNsbVft",
+          "x-api-key": TRANSPOSE_API,
         },
       }
     )
@@ -407,73 +413,16 @@ app.get("/gas", (req, res) => {
     });
 });
 
-app.get("/collections", (req, res) => {
-  axios
-    .post(
-      "https://api-v2-6.gemlabs.xyz/assets",
-      {
-        'filters': {
-          'address': "0xc178994cb9b66307cd62db8b411759dd36d9c2ee",
-          'pendingTrxs': [{}]
-      },
-        sort: {
-          "stats.one_day_volume": -1,
-        },
-        limit: 100,
-        fields: {
-          name: 1,
-          address: 1,
-          createdDate: 1,
-          imageUrl: 1,
-          stats: 1,
-          indexingStatus: 1,
-          isVerified: 1,
-          slug: 1,
-  
-          pendingTrxs: 1
-        },
-      },
-      {
-        headers: {
-          authority: "api-v2-6.gemlabs.xyz",
-          accept: "*/*",
-          "accept-encoding": "*",
-          "accept-language": "en-US,en;q=0.9",
-          "content-type": "application/json",
-          origin: "https://www.gem.xyz",
-          referer: "https://www.gem.xyz/",
-          "sec-ch-ua":
-            '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-          "sec-ch-ua-mobile": "?1",
-          "sec-ch-ua-platform": '"Android"',
-          "sec-fetch-dest": "empty",
-          "sec-fetch-mode": "cors",
-          "sec-fetch-site": "cross-site",
-          "user-agent":
-            "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36",
-          "x-api-key": "rLnNH1tdrT09EQjGsjrSS7V3uGonfZLW",
-        },
-      }
-    )
-    .then((response) => {
-      console.log(response.data);
-      res.status(200).json(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(404).json(response.data);
-    });
-});
-
 app.post("/sales/time/:id", (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
+      "x-api-key": RESEVOIR_API_KEY,
     },
   };
   axios
     .get(
-      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=${req.body.metadata}&collection=${req.params.id}&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}&x-api-key=${RESEVOIR_API_KEY}`,
+      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=${req.body.metadata}&collection=${req.params.id}&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}`,
       config
     )
     .then((response) => {
@@ -489,6 +438,7 @@ app.post("/listings/time/:id", (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
+      "x-api-key": RESEVOIR_API_KEY,
     },
   };
   axios
@@ -505,6 +455,27 @@ app.post("/listings/time/:id", (req, res) => {
     });
 });
 
+app.get("/search/:search", (req, res) => {
+  let config = {
+    headers: {
+      "accept-encoding": "*",
+      "x-api-key": RESEVOIR_API_KEY,
+    },
+  };
+
+  axios
+    .get(
+      `https://api.reservoir.tools/search/collections/v1?name=${req.params.search}&limit=5`,
+      config
+    )
+    .then((response) => {
+      console.log(response.data);
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json(response.data);
+    });
+});
 app.listen(PORT, (_req, _res) => {
   console.log("Server is live");
 });
