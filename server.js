@@ -289,7 +289,6 @@ app.get("/collections/:id", (req, res) => {
       config
     )
     .then((response) => {
-      // console.log(response.data)
       res.status(200).json(response.data);
     })
     .catch((error) => {
@@ -476,6 +475,28 @@ app.get("/search/:search", (req, res) => {
       res.status(404).json(response.data);
     });
 });
+
+app.get("/portfolio/grouped/:id", (req, res) => {
+  let config = {
+    headers: {
+      "accept-encoding": "*",
+      "x-api-key": RESEVOIR_API_KEY,
+    },
+  };
+  axios
+    .get(
+      `https://api.reservoir.tools/users/${req.params.id}/collections/v2?includeTopBid=true&includeLiquidCount=true&limit=100`,
+      config
+    )
+    .then((response) => {
+      console.log(response.data);
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json(response.data);
+    });
+});
+
 app.listen(PORT, (_req, _res) => {
   console.log("Server is live");
 });
