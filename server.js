@@ -79,6 +79,27 @@ app.get("/listings/:id", (req, res) => {
     });
 });
 
+// Listings Card With Images
+app.get("/listings/chart/:id", (req, res) => {
+  let config = {
+    headers: {
+      "accept-encoding": "*",
+      "x-api-key": RESEVOIR_API_KEY,
+    },
+  };
+  axios
+    .get(
+      `https://api.reservoir.tools/orders/asks/v3?contracts=${req.params.id}&status=active&includePrivate=false&includeMetadata=true&sortBy=price&limit=100`,
+      config
+    )
+    .then((response) => {
+      res.status(200).json({ data: response.data });
+    })
+    .catch((error) => {
+      res.status(404).json(error);
+    });
+});
+
 app.get("/info/resevoir/:id", (req, res) => {
   let config = {
     headers: {
@@ -109,7 +130,7 @@ app.get("/topcollections", (req, res) => {
 
   axios
     .get(
-      `https://api.reservoir.tools/collections/v5?includeTopBid=false&normalizeRoyalties=false&sortBy=7DayVolume&limit=10`,
+      `https://api.reservoir.tools/collections/v5?includeTopBid=false&normalizeRoyalties=false&sortBy=7DayVolume&limit=8`,
       config
     )
     .then((response) => {
