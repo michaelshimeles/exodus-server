@@ -2,18 +2,18 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 
-const MODULE_API_KEY = process.env.MODULE_API_KEY;
+const RESEVOIR_API_KEY = process.env.RESEVOIR_API_KEY;
 
 router.post("/", (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
-      "X-API-KEY": MODULE_API_KEY,
+      "X-API-KEY": RESEVOIR_API_KEY,
     },
   };
   axios
     .get(
-      `https://api.modulenft.xyz/api/v2/eth/nft/floor?contractAddress=${req.body.address}`,
+      `https://api.reservoir.tools/collections/sources/v1?collection=${req.body.address}`,
       config
     )
     .then((response) => {
