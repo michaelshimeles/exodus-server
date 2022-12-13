@@ -13,7 +13,7 @@ router.get("/:id", (req, res) => {
   };
   axios
     .get(
-      `https://api.reservoir.tools/orders/asks/v3?contracts=${req.params.id}&status=active&includePrivate=false&includeMetadata=true&sortBy=createdAt&limit=100`,
+      `https://api.reservoir.tools/orders/asks/v3?contracts=${req.params.id}&status=active&includePrivate=false&includeMetadata=true&sortBy=createdAt&limit=1000`,
       config
     )
     .then((response) => {
@@ -33,7 +33,7 @@ router.post("/time/:id", (req, res) => {
   };
   axios
     .get(
-      `https://api.reservoir.tools/orders/asks/v4?contracts=${req.params.id}&status=active&includePrivate=false&includeCriteriaMetadata=${req.body.metadata}&includeRawData=false&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}&normalizeRoyalties=false&sortBy=createdAt`,
+      `https://api.reservoir.tools/orders/asks/v4?contracts=${req.params.id}&status=active&includePrivate=false&includeCriteriaMetadata=${req.body.metadata}&includeRawData=false&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}&normalizeRoyalties=false&sortBy=createdAt&limit=1000`,
       config
     )
     .then((response) => {
@@ -54,7 +54,7 @@ router.get("/chart/:id", (req, res) => {
   };
   axios
     .get(
-      `https://api.reservoir.tools/orders/asks/v3?contracts=${req.params.id}&status=active&includePrivate=false&includeMetadata=true&sortBy=price&limit=100`,
+      `https://api.reservoir.tools/orders/asks/v3?contracts=${req.params.id}&status=active&includePrivate=false&includeMetadata=true&sortBy=price&limit=1000`,
       config
     )
     .then((response) => {

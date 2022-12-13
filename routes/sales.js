@@ -15,7 +15,7 @@ router.get("/:id", (req, res) => {
 
   axios
     .get(
-      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=true&collection=${req.params.id}`,
+      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=true&collection=${req.params.id}&limit=1000`,
       config
     )
     .then((response) => {
@@ -50,7 +50,7 @@ router.post("/time/:id", (req, res) => {
   };
   axios
     .get(
-      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=${req.body.metadata}&collection=${req.params.id}&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}`,
+      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=${req.body.metadata}&collection=${req.params.id}&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}&limit=1000`,
       config
     )
     .then((response) => {
@@ -72,7 +72,7 @@ router.get("/module/:id", (req, res) => {
   };
   axios
     .get(
-      `https://api.modulenft.xyz/api/v2/eth/nft/sales?count=100&offset=0&sortDirection=timeDesc&contractAddress=${req.params.id}&withMetadata=true"`,
+      `https://api.modulenft.xyz/api/v2/eth/nft/sales?count=100&offset=0&sortDirection=timeDesc&contractAddress=${req.params.id}&withMetadata=true&limit=100`,
       config
     )
     .then((response) => {

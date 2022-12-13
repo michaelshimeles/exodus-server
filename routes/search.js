@@ -22,7 +22,7 @@ router.get("/:search", (req, res) => {
       res.status(200).json(response.data);
     })
     .catch((error) => {
-      res.status(404).json(response.data);
+      res.status(404).json(error);
     });
 });
 
