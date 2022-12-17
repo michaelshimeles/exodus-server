@@ -74,6 +74,8 @@ Various API providers to power the server with the data it needs
 - ModuleNFT.xyz (https://modulenft.xyz/)
 - NFTGO (https://developer.nftgo.io/)
 - Mnemonic (https://www.mnemonichq.com/)
+- NFTPORT (https://www.nftport.xyz/) 
+- Transpose (https://www.transpose.io/)
 
 ## Screenshots
 
