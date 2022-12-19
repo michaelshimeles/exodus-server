@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const { response } = require("express");
 
 const MODULE_API_KEY = process.env.MODULE_API_KEY;
 

@@ -19,6 +19,7 @@ const statsRouter = require("./routes/stats")
 const ownerRouter = require("./routes/owner")
 const whalesRouter = require("./routes/whales")
 const volumeRouter = require("./routes/volume")
+const metricsRouter = require("./routes/metrics")
 
 app.use(cors());
 app.use(express.json());
@@ -41,6 +42,7 @@ app.use("/stats", statsRouter)
 app.use("/owner", ownerRouter)
 app.use("/whales", whalesRouter)
 app.use("/volume", volumeRouter)
+app.use("/metrics", metricsRouter)
 
 app.listen(PORT, (_req, _res) => {
   console.log("Server is live");
