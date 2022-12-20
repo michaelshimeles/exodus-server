@@ -33,7 +33,6 @@ router.get("/:id", (req, res) => {
         };
       });
 
-      // console.log(salesData);
       res.status(200).send(salesData);
     })
     .catch((error) => {
@@ -70,7 +69,6 @@ router.post("/:id", (req, res) => {
         };
       });
 
-      // console.log(salesData);
       res.status(200).send(salesData);
     })
     .catch((error) => {
@@ -91,7 +89,6 @@ router.post("/time/:id", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {

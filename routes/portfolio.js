@@ -41,7 +41,6 @@ router.get("/grouped/:id", (req, res) => {
       config
     )
     .then((response) => {
-      console.log(response.data);
       res.status(200).json(response.data);
     })
     .catch((error) => {
