@@ -20,16 +20,18 @@ router.get("/:id", (req, res) => {
     )
     .then((response) => {
       const salesData = response.data.sales.map((sale) => {
+        console.log(sale)
         return {
-          name: sale.token.collection.name,
-          tokenId: sale.token.tokenId,
-          orderSource: sale.orderSource,
-          image: sale.token.image,
-          txHash: sale.txHash,
-          timestamp: sale.timestamp,
-          priceInEth: sale.price.amount.decimal,
-          priceInUsd: sale.price.amount.usd,
-          washTradingScore: sale.washTradingScore,
+          id: sale?.id,
+          name: sale?.token?.collection?.name,
+          tokenId: sale?.token?.tokenId,
+          orderSource: sale?.orderSource,
+          image: sale?.token?.image,
+          txHash: sale?.txHash,
+          timestamp: sale?.timestamp,
+          priceInEth: sale?.price?.amount?.decimal,
+          priceInUsd: sale?.price?.amount?.usd,
+          washTradingScore: sale?.washTradingScore,
         };
       });
 

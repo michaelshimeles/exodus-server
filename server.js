@@ -10,7 +10,7 @@ const salesRouter = require("./routes/sales");
 const portfolioRouter = require("./routes/portfolio");
 const searchRouter = require("./routes/search");
 const gasRouter = require("./routes/gas");
-const topProfitsRouter = require("./routes/topprofits");
+const trendingRouter = require("./routes/trending");
 const infoRouter = require("./routes/info");
 const topCollectionsRouter = require("./routes/topcollections")
 const hotMintsRouter = require("./routes/hotmints")
@@ -33,7 +33,7 @@ app.use("/sales", salesRouter);
 app.use("/portfolio", portfolioRouter);
 app.use("/search", searchRouter);
 app.use("/gas", gasRouter);
-app.use("/topprofits", topProfitsRouter);
+app.use("/trending", trendingRouter);
 app.use("/info", infoRouter);
 app.use("/topcollections", topCollectionsRouter)
 app.use("/hotmints", hotMintsRouter)
