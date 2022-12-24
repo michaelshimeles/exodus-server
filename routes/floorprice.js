@@ -4,7 +4,7 @@ const axios = require("axios");
 
 const RESEVOIR_API_KEY = process.env.RESEVOIR_API_KEY;
 
-router.post("/", async (req, res) => {
+router.get("/", async (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
 
   try {
     let response = await axios.get(
-      `https://api.reservoir.tools/collections/sources/v1?collection=${req.body.address}`,
+      `https://api.reservoir.tools/collections/sources/v1?collection=${req.query.address}`,
       config
     );
     res.status(200).json(response.data);

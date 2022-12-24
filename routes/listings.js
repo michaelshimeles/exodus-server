@@ -22,7 +22,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/time/:id", async (req, res) => {
+router.get("/time/:id", async (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
@@ -32,7 +32,7 @@ router.post("/time/:id", async (req, res) => {
 
   try {
     let response = await axios.get(
-      `https://api.reservoir.tools/orders/asks/v4?contracts=${req.params.id}&status=active&includePrivate=false&includeCriteriaMetadata=${req.body.metadata}&includeRawData=false&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}&normalizeRoyalties=false&sortBy=createdAt&limit=1000`,
+      `https://api.reservoir.tools/orders/asks/v4?contracts=${req.params.id}&status=active&includePrivate=false&includeCriteriaMetadata=${req.query.metadata}&includeRawData=false&startTimestamp=${req.query.start}&endTimestamp=${req.query.end}&normalizeRoyalties=false&sortBy=createdAt&limit=1000`,
       config
     );
     res.status(200).json(response.data);

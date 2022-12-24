@@ -79,10 +79,11 @@ router.get("/collections/:id", async (req, res) => {
       `https://api.nftport.xyz/v0/accounts/${
         req.params.id
       }?chain=ethereum&continuation=${
-        Object.keys(req.body).length === 0 ? "" : req.body.continuation
+        Object.keys(req.query).length === 0 ? "" : req.query.continuation
       }`,
       config
     );
+    console.log(req.query)
     res.status(200).json(response.data);
   } catch (error) {
     res.status(404).json(error);

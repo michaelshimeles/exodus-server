@@ -71,7 +71,7 @@ router.post("/:id", async (req, res) => {
   }
 });
 
-router.post("/time/:id", async (req, res) => {
+router.get("/time/:id", async (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
@@ -80,7 +80,7 @@ router.post("/time/:id", async (req, res) => {
   };
   try {
     let response = await axios.get(
-      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=true&collection=${req.params.id}&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}&limit=1000`,
+      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=true&collection=${req.params.id}&startTimestamp=${req.query.start}&endTimestamp=${req.query.end}&limit=1000`,
       config
     );
 
