@@ -83,7 +83,6 @@ router.get("/collections/:id", async (req, res) => {
       }`,
       config
     );
-    console.log(req.query)
     res.status(200).json(response.data);
   } catch (error) {
     res.status(404).json(error);

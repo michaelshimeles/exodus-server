@@ -4,7 +4,7 @@ const axios = require("axios");
 
 const NFT_GO_API = process.env.NFT_GO_API;
 
-router.post("/", async (req, res) => {
+router.get("/", async (req, res) => {
   headers = {
     accept: "application/json",
     "X-API-KEY": NFT_GO_API,
@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
 
   try {
     let response = await axios.get(
-      `https://data-api.nftgo.io/eth/v1/market/rank/top-mints/${req.body.time}?sort_by=mint_num&is_listed=false&asc=false&offset=0&limit=10`,
+      `https://data-api.nftgo.io/eth/v1/market/rank/top-mints/${req.query.time}?sort_by=mint_num&is_listed=false&asc=false&offset=0&limit=10`,
       {
         headers,
       }

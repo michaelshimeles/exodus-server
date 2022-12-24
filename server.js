@@ -24,7 +24,7 @@ const metricsRouter = require("./routes/metrics")
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.status(200).json("Welcome to the Exodus API");
 });
 

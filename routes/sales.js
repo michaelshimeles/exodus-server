@@ -3,7 +3,6 @@ const router = express.Router();
 const axios = require("axios");
 
 const RESEVOIR_API_KEY = process.env.RESEVOIR_API_KEY;
-const MODULE_API_KEY = process.env.MODULE_API_KEY;
 
 router.get("/:id", async (req, res) => {
   let config = {
@@ -38,7 +37,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/:id", async (req, res) => {
+router.get("/chart/:id", async (req, res) => {
   let config = {
     headers: {
       "accept-encoding": "*",
@@ -48,7 +47,7 @@ router.post("/:id", async (req, res) => {
 
   try {
     let response = await axios.get(
-      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=true&collection=${req.params.id}&startTimestamp=${req.body.start}&endTimestamp=${req.body.end}&limit=1000`,
+      `https://api.reservoir.tools/sales/v4?includeTokenMetadata=true&collection=${req.params.id}&startTimestamp=${req.query.start}&endTimestamp=${req.query.end}&limit=1000`,
       config
     );
     const salesData = response.data.sales.map((sale) => {
