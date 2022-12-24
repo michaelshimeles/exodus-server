@@ -6,7 +6,7 @@ const NFT_GO_API = process.env.NFT_GO_API;
 
 const URL = "https://data-api.nftgo.io/eth/v1/market/metrics";
 
-router.get("/", (req, res) => {
+router.get("/", async (_req, res) => {
   let config = {
     headers: {
       accept: "application/json",
@@ -14,14 +14,12 @@ router.get("/", (req, res) => {
     },
   };
 
-  axios
-    .get(`${URL}`, config)
-    .then((response) => {
-      res.status(200).json(response.data);
-    })
-    .catch((error) => {
-      res.status(404).json(error);
-    });
+  try {
+    let response = await axios.get(`${URL}`, config);
+    res.status(200).json(response.data);
+  } catch (error) {
+    res.status(404).json(error);
+  }
 });
 
 module.exports = router;
