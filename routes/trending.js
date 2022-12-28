@@ -40,7 +40,7 @@ JOIN ethereum.collections as c
 ON sales.contract_address = c.contract_address
 
 ORDER BY score DESC
-LIMIT 30;`,
+LIMIT 5;`,
       },
       {
         headers: {
