@@ -4,7 +4,7 @@ const axios = require("axios");
 
 const TRANSPOSE_API = process.env.TRANSPOSE_API;
 
-router.post("/", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     let response = await axios.post(
       "https://api.transpose.io/sql",
@@ -32,7 +32,7 @@ FROM
       count(distinct concat(buyer_address, seller_address)) as distinct_addresses,
       sum(eth_price) as total_eth_spent
 FROM ethereum.nft_sales
-WHERE timestamp >= NOW() - INTERVAL  '${req.body.time}'
+WHERE timestamp >= NOW() - INTERVAL  '${req.query.time}'
 AND eth_price IS NOT NULL
 GROUP BY contract_address) as sales
 
