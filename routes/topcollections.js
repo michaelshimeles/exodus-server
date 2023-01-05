@@ -14,7 +14,7 @@ router.get("/", async (_req, res) => {
 
   try {
     let response = await axios.get(
-      `https://api.reservoir.tools/collections/v5?includeTopBid=false&normalizeRoyalties=false&sortBy=7DayVolume&limit=8`,
+      `https://api.reservoir.tools/collections/v5?includeTopBid=false&normalizeRoyalties=false&sortBy=7DayVolume&limit=10`,
       config
     );
     res.status(200).json(response.data);
