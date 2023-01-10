@@ -2,21 +2,28 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 
-const ETH_SALES_API_KEY = process.env.ETH_SALES_API_KEY;
+const TRANSPOSE_API = process.env.TRANSPOSE_API;
 
-router.get("/:id", async (_req, res) => {
-  const params = {
-    limit: 20,
-    sortDirection: "SORT_DIRECTION_DESC",
-  };
-  const headers = { "x-api-key": ETH_SALES_API_KEY };
-
+router.get("/:id", async (req, res) => {
   try {
-    let response = await axios.get(
-      `https://ethereum.rest.mnemonichq.com/collections/v1beta1/current_owners/${req.params.id}`,
+    let response = await axios.post(
+      "https://api.transpose.io/sql",
       {
-        params,
-        headers,
+        sql: `SELECT 
+        owner_address, COUNT(*)
+       FROM ethereum.nft_owners 
+       WHERE contract_address = '${req.params.id}'
+       GROUP BY
+          owner_address
+       ORDER BY
+          COUNT(*) DESC
+        LIMIT 10`,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": TRANSPOSE_API,
+        },
       }
     );
     res.status(200).json(response.data);
